@@ -150,6 +150,14 @@ export const StyledLoadingButton = styled(LoadingButton)(({ theme }) => ({
   padding: theme.spacing(0, 2.4),
   borderRadius: theme.spacing(3),
   minHeight: theme.spacing(heightButton),
+  '&.MuiButton-containedSuccess': {
+    color: theme.palette.success.main,
+    backgroundColor: alpha(theme.palette.success.main, 0.2),
+    '&:hover': {
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.success.main,
+    },
+  },
   '&.MuiButton-containedPrimary': {
     color: theme.palette.background.paper,
     '&:hover': {

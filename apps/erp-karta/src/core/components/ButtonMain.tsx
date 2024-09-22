@@ -7,7 +7,7 @@ interface Props {
   fullWidth?: boolean
   loading?: boolean
   active?: boolean
-  color?: 'secondary' | 'primary' | 'info' | 'error'
+  color?: 'secondary' | 'primary' | 'info' | 'error' | 'success'
   text: string
 }
 

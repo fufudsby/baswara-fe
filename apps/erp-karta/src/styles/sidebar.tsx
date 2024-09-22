@@ -3,92 +3,47 @@ import { styled, alpha } from '@mui/material/styles'
 import { fontSize } from 'src/styles/theme'
 
 export const StyledSidebar = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(0, 6, 4),
-  marginRight: theme.spacing(4),
+  padding: theme.spacing(0, 4, 4),
+  minWidth: theme.spacing(30),
 }))
 
 export const StyledListMenu = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  marginTop: theme.spacing(2),
-  '& .text-button': {
-    textTransform: 'capitalize',
-    fontWeight: 700,
-    whiteSpace: 'nowrap',
-    fontSize: theme.spacing(fontSize),
-    color: theme.palette.text.primary,
-    padding: 0,
-    justifyContent: 'flex-start',
-    lineHeight: 'normal',
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
+  marginTop: theme.spacing(4),
   '& .item': {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    margin: theme.spacing(1, 0),
-    '& .MuiIconButton-root': {
-      margin: theme.spacing(0, 1.5, 0, 0),
-      backgroundColor: theme.palette.common.white,
-      '& .wrapper-svg': {
-        '& svg': {
-          '& line': {
-            stroke: theme.palette.primary.main,
-          },
-        },
-      },
-      '&:hover': {
-        '& .wrapper-svg': {
-          '& svg': {
-            '& line, & circle, & path': {
-              stroke: theme.palette.primary.main,
-            },
-          },
+    '& .text-button': {
+      width: '100%',
+      display: 'block',
+      borderRadius: 0,
+      padding: theme.spacing(1.2, 1.5, 1.2, 2.5),
+      textTransform: 'capitalize',
+      whiteSpace: 'nowrap',
+      textAlign: 'left',
+      fontWeight: 400,
+      fontSize: theme.spacing(fontSize),
+      color: theme.palette.text.primary,
+      lineHeight: 'normal',
+      '&.head-button': {
+        paddingLeft: theme.spacing(1.5),
+        fontWeight: 700,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        '& .MuiSvgIcon-root': {
+          backgroundColor: theme.palette.common.white,
+          borderRadius: '50%',
+          color: theme.palette.primary.main,
         },
       },
     },
-    '&.active': {
-      '& .MuiIconButton-root': {
-        backgroundColor: theme.palette.primary.main,
-        '& .wrapper-svg': {
-          '& svg': {
-            '& line, & circle, & path': {
-              stroke: theme.palette.common.white,
-            },
-          },
-        },
-      },
+    '&.active, &.active:hover': {
       '& .text-button': {
-        color: theme.palette.primary.main,
-      },
-      '&:hover': {
-        '& .MuiIconButton-root': {
-          backgroundColor: theme.palette.primary.main,
-          '& .wrapper-svg': {
-            '& svg': {
-              '& line, & circle, & path': {
-                stroke: theme.palette.common.white,
-              },
-            },
-          },
-        },
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.common.white,
       },
     },
     '&:hover': {
-      '& .MuiIconButton-root': {
-        backgroundColor: theme.palette.common.white,
-        '& .wrapper-svg': {
-          '& svg': {
-            '& line, & circle, & path': {
-              stroke: theme.palette.primary.main,
-            },
-          },
-        },
-      },
       '& .text-button': {
+        backgroundColor: 'transparent',
         color: theme.palette.primary.main,
       },
     },
@@ -130,30 +85,18 @@ export const StyledAvatar = styled(Box)(({ theme }) => ({
 }))
 
 export const StyledSignOut = styled(Box)(({ theme }) => ({
-  marginTop: theme.spacing(1),
-  display: 'flex',
-  alignItems: 'center',
-  '& .reverse': {
-    '& .MuiButtonBase-root': {
-      backgroundColor: theme.palette.error.main,
-      margin: theme.spacing(0, 1.5, 0, 0),
-      '& .wrapper-svg': {
-        '& svg circle, & svg line': {
-          stroke: theme.palette.common.white,
-        },
-      },
-    },
-  },
   '& .text-button': {
+    display: 'block',
+    paddingLeft: theme.spacing(1.5),
+    width: '100%',
+    fontWeight: 700,
+    borderRadius: 0,
+    textTransform: 'capitalize',
     color: theme.palette.error.main,
   },
   '&:hover': {
-    '& .reverse': {
-      '& .MuiButtonBase-root': {
-        backgroundColor: alpha(theme.palette.error.main, 0.9),
-      },
-    },
     '& .text-button': {
+      backgroundColor: 'transparent',
       color: alpha(theme.palette.error.main, 0.9),
     },
   },

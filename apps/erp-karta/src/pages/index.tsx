@@ -9,16 +9,13 @@ import { StatusCodes } from 'http-status-codes'
 import ReCAPTCHA from 'react-google-recaptcha'
 import { signIn } from 'next-auth/react'
 import { toFormikValidationSchema } from 'zod-formik-adapter'
-import Layout from 'src/core/layouts/Layout'
 import { StyledAuth, StyledFormHelperText } from 'src/styles/auth'
 import { StyledPassword } from 'src/styles/form'
 import { FormikContext } from 'src/contexts/formik'
 import FormikField from 'src/core/components/formik/field'
 import ButtonMain from 'src/core/components/ButtonMain'
 import { redirectAuthentication } from 'utils/redirectAuthentication'
-import { Login } from 'src/services/auth/schemas'
-import { gql, useQuery } from '@apollo/client'
-import { GETHPPTYPES } from 'src/graphql/hpp/queries'
+import { Login } from 'src/validations/auth/schemas'
 import { BreakpointsContext } from 'src/contexts/breakpoints'
 
 const Home: BlitzPage = () => {
@@ -74,66 +71,62 @@ const Home: BlitzPage = () => {
     [formik]
   )
 
-  const { data } = useQuery(GETHPPTYPES)
-  console.log('aaa', data)
   return (
-    <Layout title="Sign In">
-      <StyledAuth>
-        <Container maxWidth="sm">
-          <Paper elevation={0}>
-            <Box className="content">
-              <Box className="img">
-                <ReactSVG
-                  beforeInjection={(svg) => {
-                    svg.classList.add(`svg-icon`)
-                    svg.setAttribute('style', `display: block;`)
-                  }}
-                  className={`wrapper-svg`}
-                  src={`/images/logo_bswr.svg`}
-                  wrapper="div"
-                />
-              </Box>
-              <Typography className="title">Planning System</Typography>
-              <FormikContext.Provider
-                value={{
-                  formik,
+    <StyledAuth>
+      <Container maxWidth="sm">
+        <Paper elevation={0}>
+          <Box className="content">
+            <Box className="img">
+              <ReactSVG
+                beforeInjection={(svg) => {
+                  svg.classList.add(`svg-icon`)
+                  svg.setAttribute('style', `display: block;`)
                 }}
-              >
-                <FormikField label="Email" type="email" />
-                <StyledPassword>
-                  <FormikField
-                    label="Kata Sandi"
-                    id="password"
-                    type={password ? 'password' : 'text'}
-                    onKeyDown={(e) => (e.key === 'Enter' ? formik.handleSubmit() : null)}
-                  />
-                  <FormControlLabel
-                    control={<Checkbox size="small" disableRipple onClick={onClickPassword} />}
-                    label="Lihat kata sandi"
-                  />
-                </StyledPassword>
-                <Box marginBottom={3}>
-                  <ReCAPTCHA
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
-                    onChange={onVerify}
-                  />
-                  {formik.touched.token && !!formik.errors?.token && (
-                    <StyledFormHelperText error>{formik.errors.token}</StyledFormHelperText>
-                  )}
-                </Box>
-                <ButtonMain
-                  onClick={() => formik.handleSubmit()}
-                  loading={loading}
-                  text="Masuk"
-                  variant="outlined"
-                  color="secondary"
-                />
-              </FormikContext.Provider>
+                className={`wrapper-svg`}
+                src={`/images/logo_bswr.svg`}
+                wrapper="div"
+              />
             </Box>
-          </Paper>
-        </Container>
-      </StyledAuth>
-    </Layout>
+            <Typography className="title">Planning System</Typography>
+            <FormikContext.Provider
+              value={{
+                formik,
+              }}
+            >
+              <FormikField label="Email" type="email" />
+              <StyledPassword>
+                <FormikField
+                  label="Kata Sandi"
+                  id="password"
+                  type={password ? 'password' : 'text'}
+                  onKeyDown={(e) => (e.key === 'Enter' ? formik.handleSubmit() : null)}
+                />
+                <FormControlLabel
+                  control={<Checkbox size="small" disableRipple onClick={onClickPassword} />}
+                  label="Lihat kata sandi"
+                />
+              </StyledPassword>
+              <Box marginBottom={3}>
+                <ReCAPTCHA
+                  sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                  onChange={onVerify}
+                />
+                {formik.touched.token && !!formik.errors?.token && (
+                  <StyledFormHelperText error>{formik.errors.token}</StyledFormHelperText>
+                )}
+              </Box>
+              <ButtonMain
+                onClick={() => formik.handleSubmit()}
+                loading={loading}
+                text="Masuk"
+                variant="outlined"
+                color="secondary"
+              />
+            </FormikContext.Provider>
+          </Box>
+        </Paper>
+      </Container>
+    </StyledAuth>
   )
 }
 

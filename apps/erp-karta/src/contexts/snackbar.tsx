@@ -1,9 +1,9 @@
 import React from 'react'
-import { Alert, Box, Snackbar, IconButton } from '@mui/material'
+import { Alert, Box, Snackbar, IconButton, alpha } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 
 export const SnackbarContext = React.createContext({
-  showSnackbar: (text: string, severity?: 'success' | 'error'): any => ({
+  showSnackbar: (text: React.ReactNode, severity?: 'success' | 'error'): any => ({
     text,
     severity,
   }),
@@ -15,13 +15,13 @@ interface Props {
 
 const SnackbarProvider: React.FunctionComponent<Props> = ({ children }: Props) => {
   const [open, setOpen] = React.useState(false)
-  const [text, setText] = React.useState('')
+  const [text, setText] = React.useState<React.ReactNode | null>()
   const [severity, setSeverity] = React.useState<'success' | 'error'>('success')
   const handleClose = React.useCallback((_event: React.ChangeEvent, reason: string) => {
     if (reason === 'clickaway') return
     setOpen(false)
   }, [])
-  const showSnackbar = React.useCallback((text: string, severity?: 'success' | 'error') => {
+  const showSnackbar = React.useCallback((text: React.ReactNode, severity?: 'success' | 'error') => {
     setOpen(true)
     setText(text)
     setSeverity(severity || 'success')
@@ -58,6 +58,10 @@ const SnackbarProvider: React.FunctionComponent<Props> = ({ children }: Props) =
             paddingBottom: 0.2,
             '& .MuiAlert-message': {
               fontSize: 14,
+              color: alpha('#FFFFFF', 0.8),
+              '& strong': {
+                color: 'common.white',
+              },
             },
             '& .MuiAlert-action': {
               paddingTop: 0,

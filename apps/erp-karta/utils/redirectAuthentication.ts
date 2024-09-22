@@ -1,8 +1,8 @@
-import { NextPageContext } from 'next'
-import { getSession } from 'next-auth/react'
+import { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
+import getServerSession from 'utils/getServerSession'
 
 export const redirectAuthentication = async (context: NextPageContext) => {
-  const session = await getSession(context)
+  const session = await getServerSession(context.req as NextApiRequest, context.res as NextApiResponse)
 
   if (session) {
     return {

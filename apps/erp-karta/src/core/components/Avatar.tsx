@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { upperCase, truncate } from 'lodash'
 import { StyledAvatar } from 'src/styles/sidebar'
 import { z } from 'zod'
-import { User } from 'src/services/user/schemas'
+import { User } from 'src/validations/user/schemas'
 
 interface Props {
   user?: z.infer<typeof User> | null

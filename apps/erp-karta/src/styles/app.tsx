@@ -18,6 +18,7 @@ export const MainContainer = styled(Box)(({ theme }) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     paddingRight: theme.spacing(4),
+    overflow: 'hidden',
   },
   '& .left': {
     paddingLeft: theme.spacing(4),
@@ -116,7 +117,7 @@ export const StyledTitleHeader = styled(Box)(({ theme }) => ({
     fontWeight: 700,
     fontSize: theme.spacing(3),
     marginRight: theme.spacing(3),
-    color: theme.palette.primary.main,
+    color: theme.palette.text.primary,
   },
   [theme.breakpoints.down('md')]: {
     '& .MuiTypography-root': {
@@ -127,6 +128,18 @@ export const StyledTitleHeader = styled(Box)(({ theme }) => ({
     '& .MuiTypography-root': {
       fontSize: theme.spacing(2.2),
     },
+  },
+}))
+
+export const StyledTitleContent = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  '& .MuiTypography-root': {
+    fontWeight: 700,
+    fontSize: theme.spacing(2),
+    marginRight: theme.spacing(3),
+    color: theme.palette.text.primary,
   },
 }))
 
@@ -210,7 +223,7 @@ export const StyledIconButtonCircle = styled(Box)(({ theme }) => ({
         width: theme.spacing(iconButtonSize),
         height: theme.spacing(iconButtonSize),
         '& line': {
-          stroke: theme.palette.primary.main,
+          stroke: `${theme.palette.primary.main} !important`,
         },
       },
     },
@@ -219,7 +232,7 @@ export const StyledIconButtonCircle = styled(Box)(({ theme }) => ({
       '& .wrapper-svg': {
         '& svg': {
           '& line, & path': {
-            stroke: theme.palette.common.white,
+            stroke: `${theme.palette.common.white} !important`,
           },
         },
       },
@@ -258,7 +271,7 @@ export const StyledIconButtonRounded = styled(Box)(({ theme }) => ({
           '& .wrapper-svg': {
             '& svg': {
               '& line, & circle, & path': {
-                stroke: theme.palette.common.white,
+                stroke: `${theme.palette.common.white} !important`,
               },
             },
           },
@@ -268,13 +281,13 @@ export const StyledIconButtonRounded = styled(Box)(({ theme }) => ({
   },
   '&.reverse': {
     '& .MuiIconButton-root': {
-      backgroundColor: '#D9DCF9',
+      backgroundColor: '#FFE2E2',
       // backgroundColor: alpha(theme.palette.primary.main, 0.2),
       '& .wrapper-svg': {
         '& svg': {
           transform: 'scale(0.85)',
           '& line': {
-            stroke: theme.palette.primary.main,
+            stroke: `${theme.palette.primary.main} !important`,
           },
         },
       },
@@ -289,7 +302,7 @@ export const StyledIconButtonRounded = styled(Box)(({ theme }) => ({
         '& .wrapper-svg': {
           '& svg': {
             '& line, & circle, & path': {
-              stroke: theme.palette.common.white,
+              stroke: `${theme.palette.common.white} !important`,
             },
           },
         },
@@ -307,7 +320,7 @@ export const StyledIconButtonRounded = styled(Box)(({ theme }) => ({
         width: theme.spacing(iconButtonSize),
         height: theme.spacing(iconButtonSize),
         '& line': {
-          stroke: theme.palette.common.white,
+          stroke: `${theme.palette.common.white} !important`,
         },
       },
     },
@@ -326,7 +339,7 @@ export const StyledIconButtonRounded = styled(Box)(({ theme }) => ({
       '& .wrapper-svg': {
         '& svg': {
           '& line, & circle, & path': {
-            stroke: theme.palette.common.white,
+            stroke: `${theme.palette.common.white} !important`,
           },
         },
       },

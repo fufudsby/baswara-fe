@@ -1,11 +1,11 @@
 import NextAuth from 'next-auth'
 
 interface User {
-  id?: number
-  name?: string
+  id?: number | string
+  name?: string | null
   token?: string
   role?: string
-  email?: string
+  email?: string | null
   token?: string
 }
 

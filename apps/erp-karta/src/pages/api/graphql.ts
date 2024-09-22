@@ -2,18 +2,33 @@ import { ApolloServer } from '@apollo/server'
 import { NextApiRequest } from 'next'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import { gql } from '@apollo/client'
+import { mergeTypeDefs } from '@graphql-tools/merge'
 import hppResolver from 'src/graphql/hpp/resolvers'
 import authResolver from 'src/graphql/auth/resolvers'
+import goodsResolver from 'src/graphql/goods/resolvers'
+import componentResolver from 'src/graphql/component/resolvers'
+import { INPUTUPDATEGOODS } from 'src/graphql/goods/mutations'
+import { TYPEGOODS } from 'src/graphql/goods/queries'
+import { TYPECOMPONENT } from 'src/graphql/component/queries'
+import { INPUTUPDATECOMPONENT } from 'src/graphql/component/mutations'
+import { TYPEHPP, INPUTHPP } from 'src/graphql/hpp/queries'
 
-const typeDefs = gql`
+const TYPEDEFS = gql`
   type Query {
     getHppTypes: [HppTypes]
+    getListHPP(getAllHppInput: GetAllHppInput!): HppList
+    getAllGoods(goodsTypeId: Int!): [Goods]
+    getComponents(componentTypeId: Int!): [Component]
     getCurrentUser: CurrentUser
   }
 
-  type HppTypes {
-    id: Int!
-    title: String!
+  type Mutation {
+    createGoods(createGoodsInput: CreateGoodsInput!): Goods!
+    updateGoods(updateGoodsInput: UpdateGoodsInput!): Goods!
+    removeGoods(id: Int!): Goods!
+    createComponent(createComponentInput: CreateComponentInput!): Component!
+    updateComponent(updateComponentInput: UpdateComponentInput!): Component!
+    removeComponent(id: Int!): Component!
   }
 
   type CurrentUser {
@@ -24,11 +39,25 @@ const typeDefs = gql`
 `;
 
 const server = new ApolloServer({
-  typeDefs,
+  typeDefs: mergeTypeDefs([
+    INPUTHPP,
+    INPUTUPDATEGOODS,
+    TYPEGOODS,
+    INPUTUPDATECOMPONENT,
+    TYPECOMPONENT,
+    TYPEHPP,
+    TYPEDEFS,
+  ]),
   resolvers: {
     Query: {
       ...hppResolver().Query,
       ...authResolver().Query,
+      ...goodsResolver().Query,
+      ...componentResolver().Query,
+    },
+    Mutation: {
+      ...goodsResolver().Mutation,
+      ...componentResolver().Mutation,
     },
   },
 })
@@ -38,7 +67,7 @@ const handler = startServerAndCreateNextHandler<NextApiRequest>(server, {
     const getSession = await fetch('http://localhost:3002/api/auth/session', {
       headers: { 'cookie': req.headers.cookie || '' },
     })
-  
+
     const session = await getSession.json();
     return session ? session : null
   },

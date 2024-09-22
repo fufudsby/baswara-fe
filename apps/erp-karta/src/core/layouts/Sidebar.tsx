@@ -1,14 +1,12 @@
 import React, { memo } from 'react'
-import { Box, Button } from '@mui/material'
-import { ReactSVG } from 'react-svg'
+import { Box, Button, Collapse } from '@mui/material'
+import { ExpandMore } from '@mui/icons-material'
 import Link from 'next/link'
 import { useQuery } from '@apollo/client'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { StyledSidebar, StyledListMenu, StyledSignOut } from 'src/styles/sidebar'
 import AvatarTitle from 'src/core/components/Avatar'
-import IconButtonRounded from 'src/core/components/IconButtonRounded'
-import { SnackbarContext } from 'src/contexts/snackbar'
 import { AccountContext } from 'src/contexts/account'
 import useCurrentPage from 'src/hooks/useCurrentPage'
 import { GETCURRENTUSER } from 'src/graphql/auth/queries'
@@ -18,25 +16,13 @@ interface Props {}
 interface PropsButton {
   text: string
   href: string
-  icon: string
 }
 
 const ComponentButton = React.memo((props: PropsButton) => {
-  const { text, href, icon } = props
+  const { text, href } = props
   const current = useCurrentPage()
   return (
     <Box className={`item ${current === href ? 'active' : ''}`}>
-      <IconButtonRounded href={`/admin/${href}`}>
-        <ReactSVG
-          beforeInjection={(svg) => {
-            svg.classList.add(`svg-icon`)
-            svg.setAttribute('style', `display: block;`)
-          }}
-          className={`wrapper-svg`}
-          src={`/images/icons/${icon}.svg`}
-          wrapper="div"
-        />
-      </IconButtonRounded>
       <Link href={`/admin/${href}`} legacyBehavior passHref>
         <Button className="text-button" component="a" disableRipple>
           {text}
@@ -48,9 +34,10 @@ const ComponentButton = React.memo((props: PropsButton) => {
 
 const Sidebar: React.FunctionComponent<Props> = () => {
   const router = useRouter()
-  const { data } = useQuery(GETCURRENTUSER)
-  const { showSnackbar } = React.useContext(SnackbarContext)
-  const { account, setAccount } = React.useContext(AccountContext)
+  const { data, loading } = useQuery(GETCURRENTUSER)
+  const { account, setAccount, setIsLoading } = React.useContext(AccountContext)
+  const [open, setOpen] = React.useState<number | null>(1)
+  
   const onSignOut = React.useCallback(async () => {
     await signOut({ redirect: false })
     await router
@@ -59,7 +46,7 @@ const Sidebar: React.FunctionComponent<Props> = () => {
       })
       .then(() => router.reload())
   }, [])
-  console.log('ddd', account)
+
   React.useEffect(() => {
     // eslint-disable-next-line
     if (!account && data && data.getCurrentUser) {
@@ -69,24 +56,38 @@ const Sidebar: React.FunctionComponent<Props> = () => {
       })
     }
   }, [data])
+
+  React.useEffect(() => {
+    if (!loading) {
+      setIsLoading(false)
+    }
+  }, [loading])
+
+  const avatar = React.useMemo(() => {
+    return (
+      <AvatarTitle user={account} />
+    )
+  }, [account])
   return (
     <StyledSidebar className="sidebar">
-      <AvatarTitle user={account} />
+      {avatar}
       <StyledListMenu>
-        <ComponentButton icon="berita" text="Berita" href="news" />
-        <ComponentButton icon="halaman" text="Infografis" href="infographic" />
+        <Box className="item">
+          <Button
+            className="text-button head-button"
+            endIcon={<ExpandMore />}
+            disableRipple
+            onClick={() => setOpen(open ? null : 1)}
+          >
+            Daftar
+          </Button>
+        </Box>
+        <Collapse in={open === 1} timeout="auto" unmountOnExit>
+          <ComponentButton text="HPP" href="hpp" />
+          <ComponentButton text="Komponen" href="components" />
+          <ComponentButton text="Barang" href="goods" />
+        </Collapse>
         <StyledSignOut>
-          <IconButtonRounded onClick={onSignOut} reverse>
-            <ReactSVG
-              beforeInjection={(svg) => {
-                svg.classList.add(`svg-icon`)
-                svg.setAttribute('style', `display: block;`)
-              }}
-              className={`wrapper-svg`}
-              src={`/images/icons/keluar-akun.svg`}
-              wrapper="div"
-            />
-          </IconButtonRounded>
           <Button className="text-button" onClick={onSignOut} component="a" disableRipple>
             Keluar
           </Button>

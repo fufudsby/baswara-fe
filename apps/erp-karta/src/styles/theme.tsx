@@ -1,7 +1,7 @@
 import { createTheme } from '@mui/material/styles'
 
 export const backgroundBody = '#F1F2F7'
-export const fontSize = 1.8
+export const fontSize = 1.6
 export const heightButton = 4.7
 export const heightButton2 = 3.7
 export const boxShadow = `0 4px 4px 0 rgba(0, 0, 0, 0.08)`
@@ -19,7 +19,7 @@ let theme = createTheme({
       main: '#D0121C',
     },
     success: {
-      main: '#5FA65F',
+      main: '#00AB2D',
     },
     text: {
       primary: '#545454',
