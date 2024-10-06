@@ -16,5 +16,10 @@ export const Hpp = z.object({
   priceRoll: z.number(),
   priceCutter: z.number(),
   unitInk: z.string(),
-  components: z.array(Component),
+  components: z.array(Component.extend({ id: z.number() })),
 })
+
+export const HppValidation = Hpp.extend({
+  unit: z.number(),
+  printer: z.number(),
+}).omit({ components: true })

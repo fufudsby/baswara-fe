@@ -71,6 +71,37 @@ export const GETALLHPP = gql`
           }
         }
       }
+      totalCount
+      currentPage
+      isFirstPage
+      isLastPage
+      nextPage
+      previousPage
+      pageCount
+    }
+  }
+`
+
+export const GETHPP = gql`
+  query GetHpp($id: Int!) {
+    getHPP(id: $id) {
+      id
+      title
+      hpp
+      area
+      pricePrintHead
+      priceInk
+      priceRoll
+      priceCutter
+      unitInk
+      components {
+        id
+        title
+        componentType {
+          id
+          title
+        }
+      }
     }
   }
 `

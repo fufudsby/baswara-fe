@@ -39,7 +39,7 @@ const Layout: React.FunctionComponent<Props> = ({ children, loading }: Props) =>
         <Box display="flex" alignItems="stretch" width={1} minHeight="100vh">
           {isAdminPage && !downLg && <Sidebar />}
           <Box className={`right-side ${downLg ? 'left' : ''}`} flexGrow={1}>
-            {loading ? <></> : children}
+            {isAdminPage && loading ? <></> : children}
             {/* {!!withMenu && <Footer />} */}
           </Box>
         </Box>

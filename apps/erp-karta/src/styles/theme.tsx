@@ -21,6 +21,10 @@ let theme = createTheme({
     success: {
       main: '#00AB2D',
     },
+    warning: {
+      light: '#FFD066',
+      main: '#E88C1F',
+    },
     text: {
       primary: '#545454',
     },

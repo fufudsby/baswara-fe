@@ -17,6 +17,7 @@ import createApolloClient from 'src/graphql/apollo-client'
 import { BreakpointsContext } from 'src/contexts/breakpoints'
 import { AccountContext } from 'src/contexts/account'
 import Layout from 'src/core/layouts/Layout'
+import { ActiveFieldContext } from 'src/contexts/activeField'
 
 function RootErrorFallback({ error }: ErrorFallbackProps) {
   return (
@@ -35,6 +36,7 @@ function RootErrorFallback({ error }: ErrorFallbackProps) {
 function MyApp({ Component, pageProps }: AppProps) {
   const [account, setAccount] = React.useState<z.infer<typeof User> | null>(null)
   const [isLoadingAccount, setIsLoading] = React.useState(true)
+  const [activeField, setActiveField] = React.useState('')
 
   const getLayout = Component.getLayout || ((page) => page)
   const client = createApolloClient()
@@ -77,9 +79,16 @@ function MyApp({ Component, pageProps }: AppProps) {
                       <ThemeProvider theme={theme}>
                         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                         <CssBaseline />
-                        <Layout loading={isLoadingAccount}>
-                          {getLayout(<Component {...pageProps} />)}
-                        </Layout>
+                        <ActiveFieldContext.Provider
+                          value={{
+                            activeField,
+                            setActiveField,
+                          }}
+                        >
+                          <Layout loading={isLoadingAccount}>
+                            {getLayout(<Component {...pageProps} />)}
+                          </Layout>
+                        </ActiveFieldContext.Provider>
                       </ThemeProvider>
                     </AppRouterCacheProvider>
                   </SnackbarProvider>

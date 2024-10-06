@@ -12,6 +12,7 @@ import { TYPEGOODS } from 'src/graphql/goods/queries'
 import { TYPECOMPONENT } from 'src/graphql/component/queries'
 import { INPUTUPDATECOMPONENT } from 'src/graphql/component/mutations'
 import { TYPEHPP, INPUTHPP } from 'src/graphql/hpp/queries'
+import { INPUTUPDATEHPP } from 'src/graphql/hpp/mutations'
 
 const TYPEDEFS = gql`
   type Query {
@@ -23,6 +24,9 @@ const TYPEDEFS = gql`
   }
 
   type Mutation {
+    createHpp(createHppInput: CreateHppInput!): Hpp!
+    updateHpp(updateHppInput: UpdateHppInput!): Hpp!
+    removeHpp(id: Int!): Hpp!
     createGoods(createGoodsInput: CreateGoodsInput!): Goods!
     updateGoods(updateGoodsInput: UpdateGoodsInput!): Goods!
     removeGoods(id: Int!): Goods!
@@ -46,6 +50,7 @@ const server = new ApolloServer({
     INPUTUPDATECOMPONENT,
     TYPECOMPONENT,
     TYPEHPP,
+    INPUTUPDATEHPP,
     TYPEDEFS,
   ]),
   resolvers: {
@@ -56,6 +61,7 @@ const server = new ApolloServer({
       ...componentResolver().Query,
     },
     Mutation: {
+      ...hppResolver().Mutation,
       ...goodsResolver().Mutation,
       ...componentResolver().Mutation,
     },

@@ -8,10 +8,10 @@ import { isNumber, truncate, find, includes } from 'lodash'
 import ButtonOptions from 'src/core/components/ButtonOptions'
 import BackdropGlobal from 'src/core/components/BackdropGlobal'
 import DialogDelete from 'src/core/components/DialogDelete'
-import { StyledBoxTable, StyledTableCell, StyledTableRow } from 'src/styles/table'
+import { StyledBoxTable, StyledPagination, StyledTableCell, StyledTableRow } from 'src/styles/table'
 import { SnackbarContext } from 'src/contexts/snackbar'
 import { Hpp } from 'src/validations/hpp/schemas'
-import { DELETEGOODS } from 'src/graphql/goods/mutations'
+import { DELETEHPP } from 'src/graphql/hpp/mutations'
 
 /**
  * Type ID
@@ -24,7 +24,10 @@ interface Props {
   typeId: number
   data: z.infer<typeof Hpp>[]
   loading: boolean
+  count: number
+  page: number
   refetch: () => void
+  setPage: (page: number) => void
 }
 
 interface Column {
@@ -48,6 +51,18 @@ const columns: Column[] = [
   { id: 'hpp', label: 'HPP (Rp)', minWidth: 130, align: 'right' },
   { id: 'aksi', label: 'Aksi', align: 'center', minWidth: 70 },
 ]
+
+export const EmptyState = React.memo(({ text }: { text: string }) => {
+  return (
+    <StyledTableRow tabIndex={-1}>
+      <StyledTableCell className="first" align="center" colSpan={8}>
+        <Typography paddingY={3} sx={{ color: 'grey.500' }}>
+          {text}
+        </Typography>
+      </StyledTableCell>
+    </StyledTableRow>
+  )
+})
 
 function typeColumnsFunction(typeId: number) {
   const printerColumns = ['priceRoll', 'priceCutter', 'pricePrintHead']
@@ -82,17 +97,20 @@ const TableHpp: React.FunctionComponent<Props> = ({
   typeId,
   data,
   loading,
+  count,
+  page,
   refetch,
+  setPage,
 }: Props) => {
   const { showSnackbar } = React.useContext(SnackbarContext)
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
   const [selected, setSelected] = React.useState<z.infer<typeof Hpp> | null>(null)
   const typeColumns = React.useMemo(() => typeColumnsFunction(typeId), [typeId])
-  const [mutationDeleteGoods, { loading: loadingDelete }] = useMutation(DELETEGOODS, {
+  const [mutationDeleteHpp, { loading: loadingDelete }] = useMutation(DELETEHPP, {
     variables: { id: selected?.id },
-    onCompleted: ({ removeGoods }) => {
-      const { title } = removeGoods
+    onCompleted: ({ removeHpp }) => {
+      const { title } = removeHpp
       refetch()
       setOpen(false)
       setSelected(null)
@@ -107,16 +125,16 @@ const TableHpp: React.FunctionComponent<Props> = ({
     (id: number) => {
       const is_number = isNumber(id)
       if (!is_number) return
-      const article = find(data, { id })
-      setSelected(article || null)
+      const findData = find(data, { id })
+      setSelected(findData || null)
       setOpen(true)
     },
     [data]
   )
 
   const onEdit = React.useCallback(async (id: number) => {
-    await router.push(`/admin/goods/update/[typeId]/[id]`, `/admin/goods/update/${typeId}/${id}`)
-  }, [])
+    await router.push(`/admin/hpp/update/[typeId]/[id]`, `/admin/hpp/update/${typeId}/${id}`)
+  }, [typeId])
 
   return (
     <StyledBoxTable>
@@ -138,78 +156,89 @@ const TableHpp: React.FunctionComponent<Props> = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {!!data?.length &&
-              data.map((row, index) => {
-                return (
-                  <StyledTableRow tabIndex={-1} key={index}>
-                    {typeColumns.map((column, i) => {
-                      let value: any
-                      if (column.id === 'aksi') {
-                        value = (
-                          <ButtonOptions
-                            id={row.id || 0}
-                            onEdit={(id) => onEdit(id)}
-                            onDelete={onDelete}
-                            justifyContent="center"
-                          />
+            {loading ? (
+              <EmptyState text="Loading ..." />
+            ) : (
+              <>
+                {!!data?.length && data.map((row, index) => {
+                  return (
+                    <StyledTableRow tabIndex={-1} key={index}>
+                      {typeColumns.map((column, i) => {
+                        let value: any
+                        if (column.id === 'aksi') {
+                          value = (
+                            <ButtonOptions
+                              id={row.id || 0}
+                              onEdit={(id) => onEdit(id)}
+                              onDelete={onDelete}
+                              justifyContent="center"
+                            />
+                          )
+                        } else if (column.id === 'no') {
+                          value = (
+                            <Typography>{index + 1}</Typography>
+                          )
+                        } else if (column.id === 'printer') {
+                          /**
+                           * ID componentType = 2 adalah Mesin (di table ComponentType)
+                           */
+                          const findValue = find(row.components, (componentValue) => componentValue.componentType?.id === 2)
+                          value = (
+                            <Typography>{findValue?.title || '-'}</Typography>
+                          )
+                        } else if (column.id === 'unit') {
+                          /**
+                           * ID componentType = 1 adalah Satuan (di table ComponentType)
+                           */
+                          const findValue = find(row.components, (componentValue) => componentValue.componentType?.id === 1)
+                          value = (
+                            <Typography>{findValue?.title || '-'}</Typography>
+                          )
+                        } else if (column.id === 'hpp' || column.id === 'priceCutter' || column.id === 'priceRoll' || column.id === 'pricePrintHead' || column.id === 'priceInk') {
+                          value = <Typography align="right">
+                            {<CurrencyFormat value={row[column.id]} displayType="text" thousandSeparator={true} prefix={'Rp'} />}
+                            </Typography>
+                        } else {
+                          value = <Typography align={column.align || 'left'}>
+                            {row[column.id] ? row[column.id] : isNumber(row[column.id]) ? '0' : '-'}
+                            </Typography>
+                        }
+                        return (
+                          <StyledTableCell
+                            key={i}
+                            align={column.align}
+                            className={`${column.id === 'aksi' ? 'sticky' : ''} ${!i ? 'first' : ''}`}
+                            sx={{
+                              whiteSpace: i === 3 || i === 4 ? 'nowrap' : 'normal',
+                            }}
+                          >
+                            {value}
+                          </StyledTableCell>
                         )
-                      } else if (column.id === 'no') {
-                        value = (
-                          <Typography>{index + 1}</Typography>
-                        )
-                      } else if (column.id === 'printer') {
-                        /**
-                         * ID componentType = 2 adalah Mesin (di table ComponentType)
-                         */
-                        const findValue = find(row.components, (componentValue) => componentValue.componentType?.id === 2)
-                        value = (
-                          <Typography>{findValue?.title || '-'}</Typography>
-                        )
-                      } else if (column.id === 'unit') {
-                        /**
-                         * ID componentType = 1 adalah Satuuan (di table ComponentType)
-                         */
-                        const findValue = find(row.components, (componentValue) => componentValue.componentType?.id === 1)
-                        value = (
-                          <Typography>{findValue?.title || '-'}</Typography>
-                        )
-                      } else if (column.id === 'hpp' || column.id === 'priceCutter' || column.id === 'priceRoll' || column.id === 'pricePrintHead' || column.id === 'priceInk') {
-                        value = <Typography align="right">
-                          {<CurrencyFormat value={row[column.id]} displayType="text" thousandSeparator={true} prefix={'Rp'} />}
-                          </Typography>
-                      } else {
-                        value = <Typography align={column.align || 'left'}>
-                          {row[column.id] ? row[column.id] : isNumber(row[column.id]) ? '0' : '-'}
-                          </Typography>
-                      }
-                      return (
-                        <StyledTableCell
-                          key={i}
-                          align={column.align}
-                          className={`${column.id === 'aksi' ? 'sticky' : ''} ${!i ? 'first' : ''}`}
-                          sx={{
-                            whiteSpace: i === 3 || i === 4 ? 'nowrap' : 'normal',
-                          }}
-                        >
-                          {value}
-                        </StyledTableCell>
-                      )
-                    })}
-                  </StyledTableRow>
-                )
-              })}
-            {!data?.length && (
-              <StyledTableRow tabIndex={-1}>
-                <StyledTableCell className="first" align="center" colSpan={7}>
-                  <Typography paddingY={3} sx={{ color: 'grey.500' }}>
-                    {loading ? 'Loading ...' : 'Data tidak ditemukan'}
-                  </Typography>
-                </StyledTableCell>
-              </StyledTableRow>
+                      })}
+                    </StyledTableRow>
+                  )
+                })}
+              </>
+            )}
+
+            {!loading && !data?.length && (
+              <EmptyState text="Data tidak ditemukan" />
             )}
           </TableBody>
         </Table>
       </Box>
+
+      {count > 1 && (
+        <StyledPagination
+          count={count}
+          page={page}
+          shape="rounded"
+          onChange={(_e: React.ChangeEvent<unknown>, page: number) => setPage(page)}
+          showFirstButton
+          showLastButton
+        />
+      )}
 
       <BackdropGlobal loading={loading || loadingDelete} withCircular={false} />
       <DialogDelete
@@ -218,7 +247,7 @@ const TableHpp: React.FunctionComponent<Props> = ({
         title={selected && selected.title ? `"${truncate(selected.title, { length: 60 })}"` : ''}
         loading={loadingDelete}
         handleClose={() => setOpen(false)}
-        handleDelete={() => mutationDeleteGoods()}
+        handleDelete={() => mutationDeleteHpp()}
       />
     </StyledBoxTable>
   )

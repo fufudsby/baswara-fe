@@ -61,8 +61,8 @@ const TableGoods: React.FunctionComponent<Props> = ({
     (id: number) => {
       const is_number = isNumber(id)
       if (!is_number) return
-      const article = find(data, { id })
-      setSelected(article || null)
+      const findData = find(data, { id })
+      setSelected(findData || null)
       setOpen(true)
     },
     [data]
@@ -70,7 +70,7 @@ const TableGoods: React.FunctionComponent<Props> = ({
 
   const onEdit = React.useCallback(async (id: number) => {
     await router.push(`/admin/goods/update/[typeId]/[id]`, `/admin/goods/update/${typeId}/${id}`)
-  }, [])
+  }, [typeId])
 
   return (
     <StyledBoxTable>

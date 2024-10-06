@@ -12,6 +12,7 @@ export const redirectAuthentication = async (context: NextPageContext) => {
       },
     }
   }
+
   return {
     props: {},
   }

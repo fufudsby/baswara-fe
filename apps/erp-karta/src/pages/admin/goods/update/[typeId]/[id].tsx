@@ -16,7 +16,7 @@ import TitleHeader from 'src/core/components/TitleHeader'
 import TitleContent from 'src/core/components/TitleContent'
 import getServerSession from 'utils/getServerSession'
 import { FormikContext } from 'src/contexts/formik'
-import FormikField from 'src/core/components/formik/field'
+import FormikField from 'src/core/components/formik/Field'
 import ButtonMain from 'src/core/components/ButtonMain'
 import { SnackbarContext } from 'src/contexts/snackbar'
 

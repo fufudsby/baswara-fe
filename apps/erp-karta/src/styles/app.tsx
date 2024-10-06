@@ -1,4 +1,4 @@
-import { Box, Paper, Dialog, Drawer, Grid, Chip, Typography, alpha } from '@mui/material'
+import { Box, Paper, Dialog, Drawer, Chip, Typography, alpha } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { backgroundBody, boxShadow, heightButton2 } from 'src/styles/theme'
 
@@ -205,10 +205,6 @@ export const StyledSubtitle = styled(Box)(({ theme }) => ({
   },
 }))
 
-export const StyledGrid = styled(Grid)(({ theme }) => ({
-  maxWidth: theme.breakpoints.values.md,
-}))
-
 export const iconButtonPadding = 1
 export const iconButtonSize = heightButton2 - iconButtonPadding
 export const StyledIconButtonCircle = styled(Box)(({ theme }) => ({
@@ -371,6 +367,21 @@ export const StyledIconButtonAction = styled(Box)(({ theme }) => ({
       },
       '&:hover': {
         backgroundColor: '#BBFFC8',
+      },
+    },
+  },
+  '&.search': {
+    '& .MuiIconButton-root': {
+      '& .wrapper-svg': {
+        '& svg': {
+          transform: 'scale(0.6)',
+          '& line, & circle': {
+            stroke: `${theme.palette.warning.main} !important`,
+          },
+        },
+      },
+      '&:hover': {
+        backgroundColor: alpha(theme.palette.warning.light, 0.3),
       },
     },
   },

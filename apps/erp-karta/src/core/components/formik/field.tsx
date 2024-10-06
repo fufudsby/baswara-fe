@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import _ from 'lodash'
+import { snakeCase } from 'lodash'
 import { Box, TextField, Typography, InputAdornment } from '@mui/material'
 import { FormikContext } from 'src/contexts/formik'
 import { StyledTextField } from 'src/styles/form'
@@ -13,8 +13,11 @@ interface Props {
   type?: React.InputHTMLAttributes<unknown>['type']
   multiline?: boolean
   withButton?: boolean
+  isSelect?: boolean
   title?: boolean
   rows?: number
+  value?: string
+  regex?: RegExp
   disabled?: boolean
   hiddenLabel?: boolean
   adornment?: string
@@ -28,20 +31,23 @@ const FormikTextField: React.FunctionComponent<Props> = ({
   label,
   activeField: activeFieldProps,
   type,
+  value,
   multiline,
   withButton,
+  isSelect,
   title,
   rows,
   disabled,
   hiddenLabel,
   adornment,
   placeholder,
+  regex,
   onKeyDown,
   onClickButton,
 }: Props) => {
   const { formik } = React.useContext(FormikContext)
   const { activeField, setActiveField } = React.useContext(ActiveFieldContext)
-  const lowercaseLabel = _.snakeCase(label)
+  const lowercaseLabel = snakeCase(label)
   const handleClickButton = React.useCallback(
     (_e: React.MouseEvent<HTMLButtonElement>) => {
       if (onClickButton) {
@@ -80,38 +86,61 @@ const FormikTextField: React.FunctionComponent<Props> = ({
           size="small"
           disabled={disabled || false}
           error={formik.touched[id || lowercaseLabel] && !!formik.errors[id || lowercaseLabel]}
-          value={formik.values[id || lowercaseLabel]}
+          value={value || formik.values[id || lowercaseLabel]}
           helperText={
             formik.touched[id || lowercaseLabel] && formik.errors[id || lowercaseLabel]
               ? formik.errors[id || lowercaseLabel]
               : ''
           }
           onChange={(e) => {
+            if (isSelect) {
+              return
+            }
+
+            const value = e.target.value
+            if (regex && e.nativeEvent['data'] && !regex.test(e.nativeEvent['data'])) {
+              return
+            }
+
             formik.setFieldTouched([id || lowercaseLabel], true)
-            formik.handleChange(e)
+
+            if (type === 'number') {
+              const value1 = value.replace(/Rp/g,'').replace(/\./g, '')
+              formik.setFieldValue(id || lowercaseLabel, !!parseInt(value1) ? parseInt(value1) : 0)
+            } else {
+              formik.handleChange(e)
+            }
           }}
           onKeyDown={onKeyDown ? onKeyDown : () => null}
-          type={type || 'text'}
+          type={type === 'number' ? 'text' : type || 'text'}
           variant="standard"
-          InputProps={
-            !!adornment
-              ? {
-                  endAdornment: <InputAdornment position="end">{adornment}</InputAdornment>,
-                }
-              : undefined
-          }
+          slotProps={{
+            input: !!adornment
+            ? {
+                endAdornment: <InputAdornment position="end">{adornment}</InputAdornment>,
+              }
+            : undefined,
+          }}
           sx={{
             marginBottom: 2,
           }}
         />
+
         {!!withButton && !!disabled && !!title && (
           <Typography className="title">{formik.values[id || lowercaseLabel]}</Typography>
         )}
-        {!!withButton && !!disabled && (
-          <IconButtonAction onClick={onClickButton ? handleClickButton : () => null} />
-        )}
-        {!!withButton && activeCheck && (
-          <IconButtonAction variant="check" onClick={() => setActiveField('')} />
+
+        {isSelect ? (
+          <IconButtonAction variant="search" onClick={onClickButton ? handleClickButton : () => null} />
+        ) : (
+          <>
+            {!!withButton && !!disabled && (
+              <IconButtonAction onClick={onClickButton ? handleClickButton : () => null} />
+            )}
+            {!!withButton && activeCheck && (
+              <IconButtonAction variant="check" onClick={() => setActiveField('')} />
+            )}
+          </>
         )}
       </Box>
     </StyledTextField>

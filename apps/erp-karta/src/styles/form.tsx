@@ -8,6 +8,7 @@ const textFieldFont = 1.6
 const heightTextField = 4.8
 const marginTopTextField = 2.5
 const marginMultiline = '3px'
+
 export const StyledTextField = styled(Box)(({ theme }) => ({
   padding: theme.spacing(marginTopTextField, 0, 2),
   width: '100%',
@@ -19,7 +20,7 @@ export const StyledTextField = styled(Box)(({ theme }) => ({
   },
   '& .inner': {
     position: 'relative',
-    '& .edit, & .check': {
+    '& .edit, & .check, & .search': {
       position: 'absolute',
       top: '50%',
       right: theme.spacing(0.7),
@@ -78,6 +79,9 @@ export const StyledTextField = styled(Box)(({ theme }) => ({
         },
         '&.Mui-disabled, &.Mui-disabled:hover': {
           borderColor: theme.palette.grey[300],
+          '& input, & textarea': {
+            textFillColor: alpha(theme.palette.text.primary, 0.7),
+          },
         },
         '&:before, &:after': {
           display: 'none',

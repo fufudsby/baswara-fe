@@ -23,17 +23,21 @@ export interface PropsTable {
 }
 
 const TableContainer = React.memo(({ id }: PropsTable) => {
+  const [page, setPage] = React.useState(1)
   const { data, loading, refetch } = useQueryApollo(GETALLHPP, { variables: {
-    input: { hppTypeId: id, limit: 5, page: 1 },
+    input: { hppTypeId: id, limit: 10, page },
   }})
 
   return (
     <Box>
       <Table
         typeId={id}
+        count={data?.getListHPP?.pageCount || 0}
+        page={page || 0}
         data={data?.getListHPP?.data || []} 
         loading={loading}
         refetch={refetch}
+        setPage={setPage}
       />
     </Box>
   )
@@ -42,7 +46,7 @@ const TableContainer = React.memo(({ id }: PropsTable) => {
 const Hpp: NextPage<Props> = () => {
   // const { downSm, downMd } = React.useContext(BreakpointsContext)
   const { data: types } = useQuery<z.infer<typeof HppType>[]>(['hppTypes'], { enabled: false })
-  console.log('masukkk')
+
   return (
     <SectionContainer className="table">
       <Box paddingX={4} paddingTop={3}>
@@ -51,7 +55,7 @@ const Hpp: NextPage<Props> = () => {
       {types?.map((item, i) => (
         <Box key={i} paddingY={2}>
           <Box paddingX={4} marginBottom={3}>
-            <TitleContent text={item.title} maxWidth={230} href={`/admin/goods/update/${item.id}/new`} />
+            <TitleContent text={item.title} maxWidth={230} href={`/admin/hpp/update/${item.id}/new`} />
           </Box>
           <TableContainer id={item.id} />
         </Box>

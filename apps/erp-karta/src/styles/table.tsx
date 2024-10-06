@@ -1,6 +1,6 @@
 import { TableRow, Box, Pagination } from '@mui/material'
 import TableCell, { tableCellClasses } from '@mui/material/TableCell'
-import { styled } from '@mui/material/styles'
+import { alpha, styled } from '@mui/material/styles'
 
 export const StyledBoxTable = styled(Box)(({ theme }) => ({
   '& .MuiTableContainer-root': {
@@ -59,30 +59,27 @@ export const StyledBoxOptions = styled(Box)(({ theme }) => ({
 
 export const StyledPagination = styled(Pagination)(({ theme }) => ({
   margin: theme.spacing(3, 0),
-  position: 'absolute',
-  top: '100%',
-  left: '50%',
-  transform: 'translateX(-50%)',
   '& .MuiPagination-ul': {
     justifyContent: 'center',
     '& .MuiButtonBase-root': {
-      border: `1px solid #BFC5F9`,
+      // border: `1px solid #BFC5F9`,
       margin: theme.spacing(0, 0.8),
+      color: theme.palette.primary.main,
       '&.Mui-selected, &.Mui-selected:hover': {
         backgroundColor: theme.palette.primary.main,
-        borderColor: theme.palette.primary.main,
+        // borderColor: theme.palette.primary.main,
         color: theme.palette.common.white,
       },
       '&:hover': {
-        backgroundColor: '#BFC5F9',
+        backgroundColor: alpha(theme.palette.primary.main, 0.1),
       },
       '&.MuiPaginationItem-previousNext, &.MuiPaginationItem-firstLast': {
         borderRadius: '50%',
-        backgroundColor: '#BFC5F9',
+        backgroundColor: alpha(theme.palette.primary.main, 0.1),
         transition: 'all 0.2s ease-out',
         '&:hover': {
           backgroundColor: theme.palette.primary.main,
-          borderColor: theme.palette.primary.main,
+          // borderColor: theme.palette.primary.main,
           '& .MuiSvgIcon-root': {
             color: theme.palette.common.white,
           },
