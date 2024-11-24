@@ -1,10 +1,10 @@
 import React from 'react'
-import { FormikValues } from 'formik'
+import { FormikProps } from 'formik'
 
 interface Data {
-  formik: FormikValues
+  formik: FormikProps<any> | null
 }
 
 export const FormikContext = React.createContext<Data>({
-  formik: {},
+  formik: null,
 })

@@ -2,25 +2,25 @@ import { GraphQLError } from 'graphql'
 import { ReasonPhrases } from 'http-status-codes'
 import { Session } from 'next-auth'
 import createApolloClient from 'src/graphql/apollo-client'
-import { GETHPPTYPES, GETALLHPP } from 'src/graphql/hpp/queries'
-import { CREATEHPP, UPDATEHPP, DELETEHPP } from 'src/graphql/hpp/mutations'
+import { GETPRODUCTS } from 'src/graphql/product/queries'
+import { CREATEPRODUCT, UPDATEPRODUCT, DELETEPRODUCT } from 'src/graphql/product/mutations'
 
 export default function resolver() {
   const client = createApolloClient() 
 
   return {
     Query: {
-      async getListHPP(_: any, { getAllHppInput }, session: Session | null) {
+      async getProducts(_: any, { getProductsInput }, session: Session | null) {
         return await client.query({
-          query: GETALLHPP,
-          variables: { input: getAllHppInput },
+          query: GETPRODUCTS,
+          variables: { input: getProductsInput },
           context: {
             headers: {
             'Authorization': `Bearer ${session?.user?.token}` || '',
             },
           },
         }).then(({ data }) => {
-          return data.getListHPP
+          return data.getProducts
         }).catch(({ cause }) => {
           throw new GraphQLError(cause?.message || ReasonPhrases.BAD_REQUEST, {
             extensions: {
@@ -32,17 +32,22 @@ export default function resolver() {
       },
     },
     Mutation: {
-      async createHpp(_: any, { createHppInput }, session: Session | null) {
+      async createProduct(_: any, { createProductInput }, session: Session | null) {
         return await client.mutate({
-          mutation: CREATEHPP,
-          variables: { input: createHppInput },
+          mutation: CREATEPRODUCT,
+          variables: {
+            input: {
+              ...createProductInput,
+              log: `DPP: ${createProductInput.priceDpp}, PPN: ${process.env.NEXT_PUBLIC_PPN}%, PPH: ${process.env.NEXT_PUBLIC_PPH}%, PPH FINAL: ${process.env.NEXT_PUBLIC_PPH_FINAL}%`,
+            },
+          },
           context: {
             headers: {
             'Authorization': `Bearer ${session?.user?.token}` || '',
             },
           },
         }).then(({ data }) => {
-          return data.createHpp
+          return data.createProduct
         }).catch(({ cause }) => {
           throw new GraphQLError(cause?.message || ReasonPhrases.BAD_REQUEST, {
             extensions: {
@@ -52,17 +57,22 @@ export default function resolver() {
           })
         })
       },
-      async updateHpp(_: any, { updateHppInput }, session: Session | null) {
+      async updateProduct(_: any, { updateProductInput }, session: Session | null) {
         return await client.mutate({
-          mutation: UPDATEHPP,
-          variables: { input: updateHppInput },
+          mutation: UPDATEPRODUCT,
+          variables: {
+            input: {
+              ...updateProductInput,
+              log: `DPP: ${updateProductInput.priceDpp}, PPN: ${process.env.NEXT_PUBLIC_PPN}%, PPH: ${process.env.NEXT_PUBLIC_PPH}%, PPH FINAL: ${process.env.NEXT_PUBLIC_PPH_FINAL}%`,
+            },
+          },
           context: {
             headers: {
             'Authorization': `Bearer ${session?.user?.token}` || '',
             },
           },
         }).then(({ data }) => {
-          return data.updateHpp
+          return data.updateProduct
         }).catch(({ cause }) => {
           throw new GraphQLError(cause?.message || ReasonPhrases.BAD_REQUEST, {
             extensions: {
@@ -72,9 +82,9 @@ export default function resolver() {
           })
         })
       },
-      async removeHpp(_: any, { id }, session: Session | null) {
+      async removeProduct(_: any, { id }, session: Session | null) {
         return await client.mutate({
-          mutation: DELETEHPP,
+          mutation: DELETEPRODUCT,
           variables: { id, userId: session?.user.id },
           context: {
             headers: {
@@ -82,7 +92,7 @@ export default function resolver() {
             },
           },
         }).then(({ data }) => {
-          return data.removeHpp
+          return data.removeProduct
         }).catch(({ cause }) => {
           throw new GraphQLError(cause?.message || ReasonPhrases.BAD_REQUEST, {
             extensions: {

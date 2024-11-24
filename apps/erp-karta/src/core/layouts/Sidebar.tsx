@@ -83,6 +83,7 @@ const Sidebar: React.FunctionComponent<Props> = () => {
           </Button>
         </Box>
         <Collapse in={open === 1} timeout="auto" unmountOnExit>
+          <ComponentButton text="Harga Jual Produk" href="products" />
           <ComponentButton text="HPP" href="hpp" />
           <ComponentButton text="Komponen" href="components" />
           <ComponentButton text="Barang" href="goods" />

@@ -7,16 +7,19 @@ import hppResolver from 'src/graphql/hpp/resolvers'
 import authResolver from 'src/graphql/auth/resolvers'
 import goodsResolver from 'src/graphql/goods/resolvers'
 import componentResolver from 'src/graphql/component/resolvers'
+import productResolver from 'src/graphql/product/resolvers'
 import { INPUTUPDATEGOODS } from 'src/graphql/goods/mutations'
 import { TYPEGOODS } from 'src/graphql/goods/queries'
 import { TYPECOMPONENT } from 'src/graphql/component/queries'
 import { INPUTUPDATECOMPONENT } from 'src/graphql/component/mutations'
 import { TYPEHPP, INPUTHPP } from 'src/graphql/hpp/queries'
 import { INPUTUPDATEHPP } from 'src/graphql/hpp/mutations'
+import { TYPEPRODUCT, INPUTPRODUCT } from 'src/graphql/product/queries'
+import { INPUTUPDATEPRODUCT } from 'src/graphql/product/mutations'
 
 const TYPEDEFS = gql`
   type Query {
-    getHppTypes: [HppTypes]
+    getProducts(getProductsInput: GetProductsInput!): Products
     getListHPP(getAllHppInput: GetAllHppInput!): HppList
     getAllGoods(goodsTypeId: Int!): [Goods]
     getComponents(componentTypeId: Int!): [Component]
@@ -33,6 +36,9 @@ const TYPEDEFS = gql`
     createComponent(createComponentInput: CreateComponentInput!): Component!
     updateComponent(updateComponentInput: UpdateComponentInput!): Component!
     removeComponent(id: Int!): Component!
+    createProduct(createProductInput: CreateProductInput!): Product!
+    updateProduct(updateProductInput: UpdateProductInput!): Product!
+    removeProduct(id: Int!): Product!
   }
 
   type CurrentUser {
@@ -51,6 +57,9 @@ const server = new ApolloServer({
     TYPECOMPONENT,
     TYPEHPP,
     INPUTUPDATEHPP,
+    TYPEPRODUCT,
+    INPUTPRODUCT,
+    INPUTUPDATEPRODUCT,
     TYPEDEFS,
   ]),
   resolvers: {
@@ -59,11 +68,13 @@ const server = new ApolloServer({
       ...authResolver().Query,
       ...goodsResolver().Query,
       ...componentResolver().Query,
+      ...productResolver().Query,
     },
     Mutation: {
       ...hppResolver().Mutation,
       ...goodsResolver().Mutation,
       ...componentResolver().Mutation,
+      ...productResolver().Mutation,
     },
   },
 })

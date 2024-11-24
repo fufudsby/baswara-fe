@@ -65,8 +65,8 @@ const FormikTextField: React.FunctionComponent<Props> = ({
 
   return (
     <StyledTextField
-      className={`${!!hiddenLabel ? 'hidden-label' : ''} ${
-        formik.touched[id || lowercaseLabel] && !!formik.errors[id || lowercaseLabel] ? 'error' : ''
+      className={`container-field ${!!hiddenLabel ? 'hidden-label' : ''} ${
+        formik?.touched[id || lowercaseLabel] && !!formik.errors[id || lowercaseLabel] ? 'error' : ''
       }`}
     >
       <Box
@@ -85,12 +85,12 @@ const FormikTextField: React.FunctionComponent<Props> = ({
           autoComplete="off"
           size="small"
           disabled={disabled || false}
-          error={formik.touched[id || lowercaseLabel] && !!formik.errors[id || lowercaseLabel]}
-          value={value || formik.values[id || lowercaseLabel]}
+          error={formik?.touched[id || lowercaseLabel] && !!formik.errors[id || lowercaseLabel]}
+          value={value || formik?.values[id || lowercaseLabel]}
           helperText={
-            formik.touched[id || lowercaseLabel] && formik.errors[id || lowercaseLabel]
+            formik?.touched[id || lowercaseLabel] && formik.errors[id || lowercaseLabel]
               ? formik.errors[id || lowercaseLabel]
-              : ''
+              : '' as any
           }
           onChange={(e) => {
             if (isSelect) {
@@ -102,13 +102,13 @@ const FormikTextField: React.FunctionComponent<Props> = ({
               return
             }
 
-            formik.setFieldTouched([id || lowercaseLabel], true)
+            formik?.setFieldTouched([id || lowercaseLabel] as any, true)
 
             if (type === 'number') {
               const value1 = value.replace(/Rp/g,'').replace(/\./g, '')
-              formik.setFieldValue(id || lowercaseLabel, !!parseInt(value1) ? parseInt(value1) : 0)
+              formik?.setFieldValue(id || lowercaseLabel, !!parseInt(value1) ? parseInt(value1) : 0)
             } else {
-              formik.handleChange(e)
+              formik?.handleChange(e)
             }
           }}
           onKeyDown={onKeyDown ? onKeyDown : () => null}
@@ -127,7 +127,7 @@ const FormikTextField: React.FunctionComponent<Props> = ({
         />
 
         {!!withButton && !!disabled && !!title && (
-          <Typography className="title">{formik.values[id || lowercaseLabel]}</Typography>
+          <Typography className="title">{formik?.values[id || lowercaseLabel]}</Typography>
         )}
 
         {isSelect ? (

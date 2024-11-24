@@ -25,8 +25,8 @@ const HppFormPrinter: React.FunctionComponent<Props> = ({ units, printers, title
       maximumFractionDigits: 0,
     })
     
-    return formik.values.priceRoll !== '' ? formatter.format(formik.values.priceRoll) : ''
-  }, [formik.values.priceRoll])
+    return formik?.values.priceRoll !== '' ? formatter.format(formik?.values.priceRoll) : ''
+  }, [formik?.values.priceRoll])
 
   const valuePriceCutter = React.useMemo(() => {
     const formatter = new Intl.NumberFormat('id-ID', {
@@ -35,8 +35,8 @@ const HppFormPrinter: React.FunctionComponent<Props> = ({ units, printers, title
       maximumFractionDigits: 0,
     })
     
-    return formik.values.priceCutter !== '' ? formatter.format(formik.values.priceCutter) : ''
-  }, [formik.values.priceCutter])
+    return formik?.values.priceCutter !== '' ? formatter.format(formik?.values.priceCutter) : ''
+  }, [formik?.values.priceCutter])
 
   const valuePricePrintHead = React.useMemo(() => {
     const formatter = new Intl.NumberFormat('id-ID', {
@@ -45,8 +45,8 @@ const HppFormPrinter: React.FunctionComponent<Props> = ({ units, printers, title
       maximumFractionDigits: 0,
     })
     
-    return formik.values.pricePrintHead !== '' ? formatter.format(formik.values.pricePrintHead) : ''
-  }, [formik.values.pricePrintHead])
+    return formik?.values.pricePrintHead !== '' ? formatter.format(formik?.values.pricePrintHead) : ''
+  }, [formik?.values.pricePrintHead])
 
   const valueHpp = React.useMemo(() => {
     const formatter = new Intl.NumberFormat('id-ID', {
@@ -55,8 +55,8 @@ const HppFormPrinter: React.FunctionComponent<Props> = ({ units, printers, title
       maximumFractionDigits: 0,
     })
     
-    return formik.values.hpp !== '' ? formatter.format(formik.values.hpp) : ''
-  }, [formik.values.hpp])
+    return formik?.values.hpp !== '' ? formatter.format(formik?.values.hpp) : ''
+  }, [formik?.values.hpp])
 
   return (
     <Grid2 container rowSpacing={1} columnSpacing={3}>

@@ -24,8 +24,8 @@ const HppFormInk: React.FunctionComponent<Props> = ({ units, title }) => {
       maximumFractionDigits: 0,
     })
     
-    return formik.values.priceInk !== '' ? formatter.format(formik.values.priceInk) : ''
-  }, [formik.values.priceInk])
+    return formik?.values.priceInk !== '' ? formatter.format(formik?.values.priceInk) : ''
+  }, [formik?.values.priceInk])
 
   const valueHpp = React.useMemo(() => {
     const formatter = new Intl.NumberFormat('id-ID', {
@@ -34,8 +34,8 @@ const HppFormInk: React.FunctionComponent<Props> = ({ units, title }) => {
       maximumFractionDigits: 0,
     })
     
-    return formik.values.hpp !== '' ? formatter.format(formik.values.hpp) : ''
-  }, [formik.values.hpp])
+    return formik?.values.hpp !== '' ? formatter.format(formik?.values.hpp) : ''
+  }, [formik?.values.hpp])
 
   return (
     <Grid2 container rowSpacing={1} columnSpacing={3}>

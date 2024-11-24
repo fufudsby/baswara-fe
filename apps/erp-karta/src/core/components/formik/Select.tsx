@@ -25,14 +25,14 @@ const FormikSelect: React.FunctionComponent<Props> = ({
   const { formik } = React.useContext(FormikContext)
 
   const handleClickButton = React.useCallback((item: Value) => {
-    formik.setFieldValue(id || snakeCase(label), item.id)
+    formik?.setFieldValue(id || snakeCase(label), item.id)
     setOpen(false)
   }, [])
 
   const value = React.useMemo(() => {
-    const formikValue = formik.values[id || snakeCase(label)]
+    const formikValue = formik?.values[id || snakeCase(label)]
     return find(data, { id: formikValue })
-  }, [data, formik.values[id || snakeCase(label)]])
+  }, [data, formik?.values[id || snakeCase(label)]])
 
   return (
     <>
@@ -47,10 +47,10 @@ const FormikSelect: React.FunctionComponent<Props> = ({
       />
 
       <StyledDialogSelect onClose={() => setOpen(false)} open={open} fullWidth maxWidth="xs">
-        <DialogTitle>Satuan</DialogTitle>
+        <DialogTitle>{label}</DialogTitle>
         <List disablePadding>
           {data.map((item, i) => (
-            <ListItem disableGutters key={i} disablePadding className={formik.values[id || snakeCase(label)] === item.id ? 'selected' : ''}>
+            <ListItem disableGutters key={i} disablePadding className={formik?.values[id || snakeCase(label)] === item.id ? 'selected' : ''}>
               <ListItemButton onClick={() => handleClickButton(item)}>
                 <ListItemText primary={item.title} />
               </ListItemButton>
