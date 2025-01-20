@@ -2,7 +2,7 @@ import { GraphQLError } from 'graphql'
 import { ReasonPhrases } from 'http-status-codes'
 import { Session } from 'next-auth'
 import createApolloClient from 'src/graphql/apollo-client'
-import { GETPRODUCTS } from 'src/graphql/product/queries'
+import { GETALLPRODUCTS, GETPRODUCTS } from 'src/graphql/product/queries'
 import { CREATEPRODUCT, UPDATEPRODUCT, DELETEPRODUCT } from 'src/graphql/product/mutations'
 
 export default function resolver() {
@@ -21,6 +21,26 @@ export default function resolver() {
           },
         }).then(({ data }) => {
           return data.getProducts
+        }).catch(({ cause }) => {
+          throw new GraphQLError(cause?.message || ReasonPhrases.BAD_REQUEST, {
+            extensions: {
+              code: cause?.extensions?.code || ReasonPhrases.BAD_REQUEST,
+              originalError: cause?.extensions?.originalError || null,
+            },
+          })
+        })
+      },
+      async getAllProducts(_: any, { getAllProductsInput }, session: Session | null) {
+        return await client.query({
+          query: GETALLPRODUCTS,
+          variables: { input: getAllProductsInput },
+          context: {
+            headers: {
+            'Authorization': `Bearer ${session?.user?.token}` || '',
+            },
+          },
+        }).then(({ data }) => {
+          return data.getAllProducts
         }).catch(({ cause }) => {
           throw new GraphQLError(cause?.message || ReasonPhrases.BAD_REQUEST, {
             extensions: {

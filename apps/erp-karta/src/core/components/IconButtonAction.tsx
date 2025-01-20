@@ -7,13 +7,15 @@ interface Props {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   variant?: 'edit' | 'check' | 'delete' | 'search' | 'block'
   tooltip?: string
+  placement?: 'bottom' | 'left' | 'right' | 'top'
+  disabled?: boolean
 }
 
-const IconButtonAction: React.FunctionComponent<Props> = ({ onClick, variant, tooltip }: Props) => {
+const IconButtonAction: React.FunctionComponent<Props> = ({ onClick, variant, tooltip, placement, disabled = false }: Props) => {
   return (
     <StyledIconButtonAction className={variant || 'edit'}>
-      <Tooltip title={tooltip} disableHoverListener={!!!tooltip}>
-        <IconButton onClick={onClick}>
+      <Tooltip title={tooltip} disableHoverListener={!!!tooltip} placement={placement || 'bottom'}>
+        <IconButton onClick={onClick} disabled={disabled} component="span">
           <ReactSVG
             beforeInjection={(svg) => {
               svg.classList.add(`svg-icon`)

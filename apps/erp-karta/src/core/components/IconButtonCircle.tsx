@@ -7,17 +7,18 @@ interface Props {
   href?: string
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   children?: React.ReactNode
+  size?: 'small' | 'medium'
 }
 
-const IconButtonCircle: React.FunctionComponent<Props> = ({ href, onClick, children }: Props) => {
+const IconButtonCircle: React.FunctionComponent<Props> = ({ href, onClick, size, children }: Props) => {
   return (
     <StyledIconButtonCircle className="icon-button-container">
       {href ? (
         <Link href={href} legacyBehavior passHref>
-          <IconButton component="a">{children}</IconButton>
+          <IconButton size={size || 'medium'} component="a">{children}</IconButton>
         </Link>
       ) : (
-        <IconButton onClick={onClick}>{children}</IconButton>
+        <IconButton onClick={onClick} size={size || 'medium'}>{children}</IconButton>
       )}
     </StyledIconButtonCircle>
   )

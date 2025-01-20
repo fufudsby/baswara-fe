@@ -19,6 +19,7 @@ import { FormikContext } from 'src/contexts/formik'
 import FormikField from 'src/core/components/formik/Field'
 import ButtonMain from 'src/core/components/ButtonMain'
 import { SnackbarContext } from 'src/contexts/snackbar'
+import { ActiveFieldContext } from 'src/contexts/activeField'
 
 export interface Props {
   isNew: boolean
@@ -30,7 +31,12 @@ const UpdateComponent: NextPage<Props> = ({ isNew, typeId }) => {
   const { data } = useQuery<z.infer<typeof ComponentType>>(['component'], { enabled: false })
   const [mutationUpdateComponent, { loading }] = useMutation(isNew ? CREATECOMPONENT : UPDATECOMPONENT)
   const { showSnackbar } = React.useContext(SnackbarContext)
+  const { activeField, setActiveField } = React.useContext(ActiveFieldContext)
 
+  const handleClickButton = React.useCallback((id: string) => {
+    setActiveField(id)
+  }, [])
+  
   const formik = useFormik({
     initialValues: {
       title: data?.title || '',
@@ -73,12 +79,19 @@ const UpdateComponent: NextPage<Props> = ({ isNew, typeId }) => {
             formik,
           }}
         >
-          <FormikField label="Title" />
+          <FormikField
+            id="title"
+            label="Judul"
+            disabled={activeField !== 'title'}
+            withButton
+            onClickButton={handleClickButton}
+          />
         </FormikContext.Provider>
       </Box>
       <ButtonMain
         onClick={() => formik.handleSubmit()}
         loading={loading}
+        disabled={loading || !formik.dirty}
         text="Simpan"
         color="success"
       />

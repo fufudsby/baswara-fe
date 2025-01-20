@@ -20,7 +20,7 @@ interface Props {
   regex?: RegExp
   disabled?: boolean
   hiddenLabel?: boolean
-  adornment?: string
+  adornment?: string | React.ReactElement
   placeholder?: string
   onKeyDown?: (e: React.KeyboardEvent) => void
   onClickButton?: (id?: string) => void
@@ -70,7 +70,7 @@ const FormikTextField: React.FunctionComponent<Props> = ({
       }`}
     >
       <Box
-        className={`inner ${!!withButton && !!disabled ? 'with-button' : ''} ${
+        className={`inner ${!!withButton ? 'with-button' : ''} ${
           !!title && !!withButton && !!disabled ? 'with-title' : ''
         } ${multiline ? 'multiline' : ''}`}
       >
@@ -115,11 +115,12 @@ const FormikTextField: React.FunctionComponent<Props> = ({
           type={type === 'number' ? 'text' : type || 'text'}
           variant="standard"
           slotProps={{
-            input: !!adornment
-            ? {
-                endAdornment: <InputAdornment position="end">{adornment}</InputAdornment>,
-              }
-            : undefined,
+            htmlInput: {
+              maxLength: multiline ? undefined : 128,
+            },
+            input: {
+              endAdornment: !!adornment ? <InputAdornment position="end">{adornment}</InputAdornment> : undefined,
+            }
           }}
           sx={{
             marginBottom: 2,

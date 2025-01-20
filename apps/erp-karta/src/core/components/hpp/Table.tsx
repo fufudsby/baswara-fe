@@ -52,10 +52,10 @@ const columns: Column[] = [
   { id: 'aksi', label: 'Aksi', align: 'center', minWidth: 70 },
 ]
 
-export const EmptyState = React.memo(({ text }: { text: string }) => {
+export const EmptyState = React.memo(({ text, colSpan }: { text: string, colSpan?: number }) => {
   return (
     <StyledTableRow tabIndex={-1}>
-      <StyledTableCell className="first" align="center" colSpan={8}>
+      <StyledTableCell className="first" align="center" colSpan={colSpan || 8}>
         <Typography paddingY={3} sx={{ color: 'grey.500' }}>
           {text}
         </Typography>

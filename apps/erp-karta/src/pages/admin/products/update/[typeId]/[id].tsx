@@ -142,7 +142,7 @@ const UpdateProduct: NextPage<Props> = ({ isNew, typeId, useDisplay, useInk, use
 
   return (
     <SectionContainer>
-      <TitleHeader text="HPP" href="/admin/products" />
+      <TitleHeader text="Harga Jual Produk" href="/admin/products" />
       <Box paddingTop={4} marginBottom={2}>
         <Box marginBottom={2}>
           <TitleContent text={`Tambahkan Daftar ${productType?.title || ''}`} />
@@ -245,6 +245,7 @@ const UpdateProduct: NextPage<Props> = ({ isNew, typeId, useDisplay, useInk, use
       <ButtonMain
         onClick={() => formik.handleSubmit()}
         loading={loading}
+        disabled={loading || !formik.dirty}
         text="Simpan"
         color="success"
       />

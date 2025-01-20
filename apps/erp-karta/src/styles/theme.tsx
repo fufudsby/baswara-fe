@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material/styles'
 
 export const backgroundBody = '#F1F2F7'
+export const purple = '#B11256'
 export const fontSize = 1.6
 export const heightButton = 4.7
 export const heightButton2 = 3.7
@@ -57,6 +58,7 @@ theme = createTheme(theme, {
           '& .MuiTooltip-popper': {
             '& .MuiTooltip-tooltip': {
               fontSize: 12,
+              fontWeight: 'normal',
             },
           },
         },

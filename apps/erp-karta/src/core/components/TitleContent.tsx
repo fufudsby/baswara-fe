@@ -8,18 +8,20 @@ interface Props {
   text: string
   href?: string
   maxWidth?: number
+  onClick?: () => void
 }
 
 const TitleContent: React.FunctionComponent<Props> = ({
   text,
   href,
   maxWidth,
+  onClick,
 }) => {
   return (
     <StyledTitleContent maxWidth={maxWidth || undefined}>
       <Typography>{text}</Typography>
-      {href && (
-        <IconButtonRounded href={href} reverse>
+      {href || onClick && (
+        <IconButtonRounded href={href} onClick={onClick} reverse>
           <ReactSVG
             beforeInjection={(svg) => {
               svg.classList.add(`svg-icon`)

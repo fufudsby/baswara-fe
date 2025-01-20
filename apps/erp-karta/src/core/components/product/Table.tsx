@@ -33,7 +33,7 @@ interface Column {
 
 const columns: Column[] = [
   { id: 'no', label: 'No.', minWidth: 60 },
-  { id: 'title', label: 'Bahan', minWidth: 250 },
+  { id: 'title', label: 'Nama Produk', minWidth: 250 },
   { id: 'priceDpp', label: 'Harga Jual (Rp)', minWidth: 130, align: 'right' },
   { id: 'unit', label: 'Satuan', minWidth: 130 },
   { id: 'description', label: 'Catatan', minWidth: 130 },

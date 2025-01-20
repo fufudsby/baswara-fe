@@ -170,6 +170,7 @@ const UpdateHpp: NextPage<Props> = ({ isNew, typeId }) => {
       <ButtonMain
         onClick={() => formik.handleSubmit()}
         loading={loading}
+        disabled={loading || !formik.dirty}
         text="Simpan"
         color="success"
       />
@@ -248,7 +249,6 @@ export async function getServerSideProps({ req, res, query }) {
             },
           },
         }).then(({ data }) => {
-          console.log('data masuk', data)
           return data?.getHPP || null
         }).catch(() => {
           return null

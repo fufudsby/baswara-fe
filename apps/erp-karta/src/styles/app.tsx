@@ -57,6 +57,7 @@ export const StyledHome = styled(Box)(({ theme }) => ({
 
 export const SectionContainer = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3, 4),
+  marginBottom: theme.spacing(4),
   boxShadow: 'none',
   '&.full-height': {
     minHeight: '100%',
@@ -222,6 +223,14 @@ export const StyledIconButtonCircle = styled(Box)(({ theme }) => ({
           stroke: `${theme.palette.primary.main} !important`,
         },
       },
+    },
+    '&.MuiIconButton-sizeSmall': {
+      '& .wrapper-svg': {
+        '& svg': {
+          width: theme.spacing(iconButtonSize - 0.5),
+          height: theme.spacing(iconButtonSize - 0.5),
+        },
+      },  
     },
     '&:hover': {
       backgroundColor: theme.palette.primary.main,
@@ -601,64 +610,19 @@ export const StyledAccountPhoto = styled(Box)(({ theme }) => ({
   },
 }))
 
-export const StyledDialog = styled(Box)(({ theme }) => ({
-  '& .icon-button-container': {
-    '& .MuiIconButton-root': {
-      margin: 0,
+export const StyledDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogTitle-root': {
+    '& .icon-button-container': {
+      '& .MuiButtonBase-root': {
+        marginRight: 0,
+      },
     },
   },
-  '& .options': {
-    '& .MuiButton-root': {
-      display: 'flex',
-      width: '100%',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textTransform: 'capitalize',
-      '& .wrapper-svg': {
-        '& svg': {
-          width: theme.spacing(10),
-          height: theme.spacing(10),
-          '& polyline, & path': {
-            stroke: theme.palette.grey[400],
-            transition: `all 0.15s ease-out`,
-          },
-        },
-      },
-      '& .MuiTypography-root': {
-        color: theme.palette.text.primary,
-        padding: theme.spacing(1, 0),
-      },
-      '& .MuiCheckbox-root': {
-        padding: theme.spacing(0.5),
-        '& .MuiSvgIcon-root': {
-          width: theme.spacing(3),
-          height: theme.spacing(3),
-          color: theme.palette.grey[400],
-        },
-      },
-      '&:hover': {
-        backgroundColor: 'transparent',
-        '& .wrapper-svg': {
-          '& svg': {
-            width: theme.spacing(10),
-            height: theme.spacing(10),
-            '& polyline, & path': {
-              stroke: theme.palette.primary.main,
-            },
-          },
-        },
-      },
-    },
-    '&.active': {
-      '& .MuiButton-root': {
-        '& .MuiCheckbox-root': {
-          '& .MuiSvgIcon-root': {
-            color: theme.palette.primary.main,
-          },
-        },
-      },
-    },
+  '& .MuiDialogContent-root': {
+    paddingBottom: 0,
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(2, 3),
   },
 }))
 

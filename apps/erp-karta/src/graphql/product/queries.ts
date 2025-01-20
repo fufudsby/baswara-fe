@@ -6,15 +6,34 @@ export const INPUTPRODUCT = gql`
     limit: Int!
     page: Int!
   }
+
+  input GetAllProductsInput {
+    limit: Int!
+    search: String
+  }
 `
 
 export const TYPEPRODUCT = gql`
+  type productType {
+    id: Int!
+    title: String!
+  }
+
   type Product {
     id: Int!
     title: String!
     priceDpp: Int!
     unit: Component
     description: String!
+  }
+
+  type ProductList {
+    id: Int!
+    title: String!
+    priceDpp: Int!
+    unit: Component
+    description: String!
+    productType: productType
   }
 
   type Products {
@@ -34,6 +53,23 @@ export const GETPRODUCTTYPES = gql`
     getProductTypes {
       id
       title
+    }
+  }
+`
+
+export const GETALLPRODUCTS = gql`
+  query GetAllProducts($input: GetAllProductsInput!) {
+    getAllProducts(getAllProductsInput: $input) {
+      id
+      title
+      priceDpp
+      description
+      unit {
+        title
+      }
+      productType {
+        title
+      }
     }
   }
 `

@@ -41,7 +41,7 @@ const Sidebar: React.FunctionComponent<Props> = () => {
   const onSignOut = React.useCallback(async () => {
     await signOut({ redirect: false })
     await router
-      .replace('https://admin.surabaya.go.id', 'https://admin.surabaya.go.id', {
+      .replace('/', '/', {
         unstable_skipClientCache: true,
       })
       .then(() => router.reload())
@@ -77,15 +77,30 @@ const Sidebar: React.FunctionComponent<Props> = () => {
             className="text-button head-button"
             endIcon={<ExpandMore />}
             disableRipple
-            onClick={() => setOpen(open ? null : 1)}
+            onClick={() => setOpen(2)}
+          >
+            Operator
+          </Button>
+        </Box>
+        <Collapse in={open === 2} timeout="auto" unmountOnExit>
+          <ComponentButton text="Operator Desain" href="operator-design" />
+        </Collapse>
+        <Box className="item">
+          <Button
+            className="text-button head-button"
+            endIcon={<ExpandMore />}
+            disableRipple
+            onClick={() => setOpen(1)}
           >
             Daftar
           </Button>
         </Box>
         <Collapse in={open === 1} timeout="auto" unmountOnExit>
           <ComponentButton text="Harga Jual Produk" href="products" />
+          <ComponentButton text="Harga Jual Finishing" href="finishing" />
           <ComponentButton text="HPP" href="hpp" />
           <ComponentButton text="Komponen" href="components" />
+          <ComponentButton text="Konsumen" href="customers" />
           <ComponentButton text="Barang" href="goods" />
         </Collapse>
         <StyledSignOut>

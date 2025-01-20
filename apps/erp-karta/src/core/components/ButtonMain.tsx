@@ -6,9 +6,9 @@ interface Props {
   variant?: 'contained' | 'outlined'
   fullWidth?: boolean
   loading?: boolean
-  active?: boolean
   color?: 'secondary' | 'primary' | 'info' | 'error' | 'success'
   text: string
+  disabled?: boolean
 }
 
 const ButtonMain: React.FunctionComponent<Props> = ({
@@ -16,20 +16,20 @@ const ButtonMain: React.FunctionComponent<Props> = ({
   variant,
   fullWidth,
   loading,
-  active,
   color,
   text,
+  disabled,
 }: Props) => {
   return (
     <StyledLoadingButton
-      className={active ? 'active' : ''}
+      className={`${loading ? 'loading' : ''}`}
       onClick={(e) => onClick(e)}
       variant={variant || 'contained'}
       disableElevation
       fullWidth={fullWidth}
       size="small"
       loading={loading}
-      disabled={loading}
+      disabled={loading || disabled}
       color={color || 'primary'}
     >
       {text}

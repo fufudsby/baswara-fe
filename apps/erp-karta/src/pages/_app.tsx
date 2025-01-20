@@ -1,6 +1,7 @@
 import React from 'react'
 import { ErrorFallbackProps, ErrorComponent, ErrorBoundary, AppProps } from '@blitzjs/next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { ApolloProvider } from '@apollo/client'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter'
 import { ThemeProvider } from '@mui/material/styles'
@@ -19,6 +20,10 @@ import { AccountContext } from 'src/contexts/account'
 import Layout from 'src/core/layouts/Layout'
 import { ActiveFieldContext } from 'src/contexts/activeField'
 
+export const delay = (delayInms: number) => {
+  return new Promise((resolve) => setTimeout(resolve, delayInms))
+}
+
 function RootErrorFallback({ error }: ErrorFallbackProps) {
   return (
     <ErrorComponent
@@ -34,6 +39,7 @@ function RootErrorFallback({ error }: ErrorFallbackProps) {
  */
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter()
   const [account, setAccount] = React.useState<z.infer<typeof User> | null>(null)
   const [isLoadingAccount, setIsLoading] = React.useState(true)
   const [activeField, setActiveField] = React.useState('')
@@ -46,6 +52,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   const downMd = useMediaQuery(theme.breakpoints.down('md'))
   const downLg = useMediaQuery(theme.breakpoints.down('lg'))
   const downLg2 = useMediaQuery(theme.breakpoints.down(theme.breakpoints.values.lg + 100))
+
+  React.useEffect(() => {
+    const handleStart = () => setActiveField('')
+    router.events.on('routeChangeStart', handleStart)
+  }, [router])
 
   return (
     <>

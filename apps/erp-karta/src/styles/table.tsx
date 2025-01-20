@@ -17,7 +17,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
     right: 0,
     // background: theme.palette.background.paper,
   },
-  '&.first': {
+  '&.first, &.checked': {
     borderLeftColor: 'transparent !important',
   },
   '&.head': {
@@ -36,7 +36,43 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }))
 
 export const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&.link': {
+    cursor: 'pointer',
+    '& td': {
+      backgroundColor: theme.palette.common.white,
+    },
+    '& td.checked': {
+      borderLeftColor: 'transparent !important',
+      '& .wrapper-svg': {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: theme.spacing(2.5),
+        height: theme.spacing(2.5),
+        borderRadius: '50%',
+        backgroundColor: theme.palette.success.main,
+        '& svg': {
+          width: theme.spacing(1.5),
+          height: theme.spacing(1.5),
+          '& path': {
+            stroke: `${theme.palette.common.white} !important`,
+          },
+        },
+      },
+    },
+    '&:hover': {
+      '& td': {
+        backgroundColor: theme.palette.grey[50],
+      },
+      '&:nth-of-type(even)': {
+        '& td': {
+          backgroundColor: '#c0d3f7',
+        },
+      },
+    },
+  },
   '& td': {
+    transition: 'all 0.2s ease-out',
     backgroundColor: theme.palette.common.white,
   },
   '&:nth-of-type(even)': {
@@ -52,7 +88,7 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export const StyledBoxOptions = styled(Box)(({ theme }) => ({
   display: 'flex',
   position: 'relative',
-  '& button': {
+  '& .MuiButtonBase-root': {
     margin: theme.spacing(0, 1),
   },
 }))

@@ -12,6 +12,15 @@ const marginMultiline = '3px'
 export const StyledTextField = styled(Box)(({ theme }) => ({
   padding: theme.spacing(marginTopTextField, 0, 2),
   width: '100%',
+  '&.date-picker': {
+    '& .MuiFormControl-root': {
+      '& .MuiInputBase-root': {
+        '& .MuiInputAdornment-root': {
+          marginRight: theme.spacing(2),
+        },
+      },
+    },
+  },
   '&.hidden-label': {
     paddingTop: 0,
   },
@@ -86,8 +95,10 @@ export const StyledTextField = styled(Box)(({ theme }) => ({
         '&:before, &:after': {
           display: 'none',
         },
+        '& .MuiInputBase-inputAdornedEnd': {
+          paddingRight: 0,
+        },
         '& .MuiInputAdornment-root': {
-          marginRight: theme.spacing(2),
           '& .MuiIconButton-edgeEnd': {
             backgroundColor: alpha(theme.palette.primary.main, 0.2),
             padding: theme.spacing(iconButtonPadding / 2),
@@ -103,6 +114,12 @@ export const StyledTextField = styled(Box)(({ theme }) => ({
               },
             },
           },
+          '& .wrapper-svg svg': {
+            color: theme.palette.primary.main,
+            width: theme.spacing(iconButtonSize),
+            height: theme.spacing(iconButtonSize),
+            transform: `scale(0.9)`,
+          },
         },
       },
       '& .MuiFormHelperText-root': {
@@ -113,6 +130,13 @@ export const StyledTextField = styled(Box)(({ theme }) => ({
       },
     },
     '&.multiline': {
+      '&.inner': {
+        '& .edit, & .check, & .search': {
+          top: theme.spacing(0.7),
+          right: theme.spacing(0.7),
+          transform: `none`,
+        },
+      },
       '& .MuiFormControl-root': {
         marginBottom: `0 !important`,
         '& .MuiFormLabel-root': {
@@ -120,11 +144,12 @@ export const StyledTextField = styled(Box)(({ theme }) => ({
           color: theme.palette.grey[400],
           transform: `translate(0, ${marginMultiline})`,
           '&.Mui-focused, &.MuiFormLabel-filled': {
-            color: theme.palette.grey[900],
+            color: theme.palette.primary.main,
             transform: `translate(0, calc(-${theme.spacing(
               heightTextField / 2 + marginTopTextField
             )} + ${marginMultiline}))`,
           },
+          
         },
       },
     },
@@ -216,9 +241,20 @@ export const StyledLoadingButton = styled(LoadingButton)(({ theme }) => ({
       color: theme.palette.background.paper,
     },
   },
+  '&.loading': {
+    color: 'transparent !important',
+  },
   '&.Mui-disabled': {
-    color: 'transparent',
     borderColor: theme.palette.grey[500],
+    '&.MuiButton-containedSuccess': {
+      color: alpha(theme.palette.success.main, 0.6),
+      '& .MuiLoadingButton-loadingIndicator': {
+        color: alpha(theme.palette.success.main, 0.6),
+      },  
+    },
+    '&.MuiButton-containedError': {
+      backgroundColor: alpha(theme.palette.error.main, 0.6),
+    },  
     '& .MuiLoadingButton-loadingIndicator': {
       color: theme.palette.grey[500],
     },

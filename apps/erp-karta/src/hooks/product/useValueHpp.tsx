@@ -2,14 +2,14 @@ import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { find, isNumber } from 'lodash'
 import { z } from 'zod'
-import { Product } from 'src/validations/product/schemas'
+import { Finishing } from 'src/validations/finishing/schemas'
 
 interface Props {
   isNew: boolean
 }
 
 const useValueHpp = ({ isNew }: Props) => {
-  const { data } = useQuery<z.infer<typeof Product>>(['product'], { enabled: false })
+  const { data } = useQuery<z.infer<typeof Finishing>>(['finishing'], { enabled: false })
 
   const valueMaterial = React.useMemo(() => {
     if (isNew) return ''
